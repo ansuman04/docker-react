@@ -2,8 +2,20 @@ sudo: required
 services:
   - docker
   
-before-install:
+before_install:
   - docker build -t ansuman04/docker-react -f Dockerfile.dev .
   
 script:
   - docker run -e CI=true ansuman04/docker-react npm run test
+  
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "docker-react"
+  env: "Docker-env"
+  bucket_name: "elasticbeanstalk-us-east-1-407132785304"
+  bucket_path: "docker_react"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
